@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CounterCubit extends Cubit<int> {
-  CounterCubit() : super(0);
+enum CounterEvent { increment }
 
-  void increment() => emit(state + 1);
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+
+  // void increment() => emit(state + 1);
+
+  @override
+  Stream<int> mapEventToState(CounterEvent event) async* {
+    switch (event) {
+      case CounterEvent.increment:
+        yield state + 1;
+        break;
+      default:
+        state;
+    }
+  }
 }
 
 void main() {
@@ -16,7 +29,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: BlocProvider(
-        create: (_) => CounterCubit(),
+        create: (_) => CounterBloc(),
         child: CounterPage(),
       ),
     );
@@ -32,7 +45,7 @@ class CounterPage extends StatelessWidget {
         title: Text('Counter'),
       ),
       body: Center(
-        child: BlocBuilder<CounterCubit, int>(
+        child: BlocBuilder<CounterBloc, int>(
           builder: (context, state) {
             return Text(
               '$state',
@@ -43,8 +56,8 @@ class CounterPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // BlocProvider.of<CounterCubit>(context).increment();
-          context.read<CounterCubit>().increment();
+          // BlocProvider.of<CounterBloc>(context).increment();
+          context.read<CounterBloc>().add(CounterEvent.increment);
         },
         child: Icon(Icons.add),
       ),
