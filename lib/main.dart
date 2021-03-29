@@ -39,20 +39,12 @@ class MyApp extends StatelessWidget {
 class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Counter'),
       ),
       body: Center(
-        child: BlocBuilder<CounterBloc, int>(
-          builder: (context, state) {
-            return Text(
-              '$state',
-              style: theme.textTheme.headline1,
-            );
-          },
-        ),
+        child: CounterText(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -61,6 +53,21 @@ class CounterPage extends StatelessWidget {
         },
         child: Icon(Icons.add),
       ),
+    );
+  }
+}
+
+class CounterText extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return BlocBuilder<CounterBloc, int>(
+      builder: (context, state) {
+        return Text(
+          '$state',
+          style: theme.textTheme.headline1,
+        );
+      },
     );
   }
 }
